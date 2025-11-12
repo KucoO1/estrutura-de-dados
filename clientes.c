@@ -180,3 +180,175 @@ Clientes * removerCliente(Clientes * clientesLista, int numero){
 	free(aux);
 	return clientesLista;
 }
+//Daqui para baixo são as minhas funções
+//By: Mário:)
+/*
+
+Clientes * criarListaDiamond(){
+	return NULL;
+}
+Clientes * criarsListaGold(){
+	return NULL;
+}
+Clientes * criarListaSimples(){
+	return NULL;
+}
+Void tresListasClientes(Clientes**golds,Clientes**diamonds,Clientes**simples,Clientes * clientesLista){
+    Clientes *aux = clientesLista;
+    Clientes *a=NULL;	
+    if(clientesLista == NULL) return NULL;
+	while(aux!=NULL){
+		
+		a=aux->proximo;
+		if(strcmp(aux->categoria, "diamond") == 0){
+			
+            aux->proximo=*diamonds;
+            *diamonds=aux;
+		}
+        else if(strcmp(aux->categoria, "gold") == 0){
+        	aux->proximo=*golds;
+            *golds=aux;
+		}                                     
+            
+        else if(strcmp(aux->categoria, "simples") == 0){
+        	aux->proximo=*simples;
+            *simples=aux;
+		}
+		aux=a;
+    
+	}
+	 }
+
+Clientes* unirTresListas(Clientes*golds,Clientes*diamonds,Clientes*simples){
+	Clientes *novaLista = NULL;
+    Clientes *fim = NULL;
+
+    if(diamonds) { 
+		novaLista = diamonds; 
+		fim = diamonds; 
+		while(fim->proximo != NULL) {
+			fim = fim->proximo;
+		} 
+	}
+    if(golds) { 
+		if(novaLista==NULL){
+			novaLista = golds; 
+		} 
+			
+		else{
+			fim->proximo = golds; 
+            while(fim->proximo != NULL){
+               fim = fim->proximo; 
+            } 
+		}
+	}
+			
+    if(simples){ 
+    
+		if(novaLista==NULL) 
+			novaLista = simples; 
+		else{ 
+			fim->proximo = simples; 
+			while(fim->proximo != NULL){
+			fim = fim->proximo;	
+			}
+	}
+
+    return novaLista;
+}
+}
+ Clientes *inserirPorCategoria(Clientes *clientesLista,int numero, char *nome, char *categoria, DataDeNascimento nascimento){
+ 	Clientes *novoCliente = (Clientes*)malloc(sizeof(Clientes));
+ 	Clientes *aux= clientesLista,*a= clientesLista ;
+ 	if(aux){ 
+ 	if(novoCliente){
+ 		novoCliente->numero = numero;
+        strcpy(novoCliente->nome, nome);
+        strcpy(novoCliente->categoria, categoria);
+        novoCliente->nascimento = nascimento;
+        novoCliente->proximo = NULL;
+ 		if(strcmp(novoCliente->categoria, "diamond") == 0){
+ 			while(aux!=NULL){
+ 			if(aux->proximo){
+ 				if(strcmp(aux->categoria, "diamond") == 0){
+ 					if(strcmp(aux->proximo->categoria, "diamond")!=0){
+ 						novoCliente->proximo= aux->proximo;
+ 						aux->proximo=novoCliente;
+ 						return clientesLista;
+			 }
+			 
+			}else{
+				novoCliente->proximo = aux;
+				return novoCliente;
+			}
+				
+			} else {
+				aux->proximo=novoCliente;
+				return clientesLista;
+		
+		 }
+ 			aux=aux->proximo;
+		 } }
+ 			if(strcmp(novoCliente->categoria, "gold") == 0){
+ 			while(aux!=NULL){
+ 			if(aux->proximo){
+ 			if(strcmp(aux->categoria, "gold") == 0){
+ 				if(strcmp(aux->proximo->categoria, "simples")==0){
+ 					novoCliente->proximo= aux->proximo;
+ 					aux->proximo=novoCliente;
+ 				return clientesLista;
+				 }
+			 }
+			 else if(strcmp(aux->categoria, "diamond") == 0 && strcmp(aux->proximo->categoria, "simples") == 0){
+ 				novoCliente->proximo= aux->proximo;
+ 				aux->proximo=novoCliente;
+ 				return clientesLista;
+			 } 
+			 else{
+			 	novoCliente->proximo = aux;
+				return novoCliente;
+			 }
+			 
+			} else {
+				if(strcmp(aux->categoria, "diamond") == 0 ||strcmp(aux->categoria, "gold") == 0){
+				
+					aux->proximo=novoCliente;
+					return clientesLista;
+				}
+				else{
+					novoCliente->proximo = aux;
+					return novoCliente;	
+				}
+			}
+			aux=aux->proximo;
+		 }
+ 		
+		 }
+ 		if(strcmp(novoCliente->categoria, "simples") == 0){
+ 			while(aux!=NULL){
+ 			if(aux->proximo==NULL){
+ 				novoCliente->proximo= aux->proximo;
+ 				aux->proximo=novoCliente;
+ 				return clienteLista;
+			 }
+			 aux=aux->proximo;
+			}
+				
+			}
+		 }
+ 		
+		 }
+	 }else
+	 printf(" \nErro na alocação de memória do novo cliente!\n");
+ 	}else{
+ 		novoCliente->numero = numero;
+        strcpy(novoCliente->nome, nome);
+        strcpy(novoCliente->categoria, categoria);
+        novoCliente->nascimento = nascimento;
+        novoCliente->proximo = NULL;
+        aux=novoCliente;
+        return aux;
+	 }
+ 	
+ }
+*\
