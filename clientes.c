@@ -354,6 +354,7 @@ Clientes *inserirPorCategoria_atualizado(Clientes *clientesLista, int numero, ch
         }
         else {
             printf("\nErro na alocação de memória do novo cliente!\n");
+			return NULL;
         }
     }
     else {
