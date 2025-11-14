@@ -5,8 +5,11 @@
 #include <string.h>
 
 int menuPrincipal ();
+int anoBissexto(int ano);
+int dataValida(DataDeNascimento nascimento);
 void PausaBasica();
 char* Categoria ();
+void pausarTela();
 
 main () {
 	setlocale(LC_ALL, "Portuguese");
@@ -15,77 +18,78 @@ main () {
     Clientes *diamonds = NULL;
     Clientes *simples = NULL;
     DataDeNascimento nascimento;
+    char nome[100];
+    int numero =0, menu=0;
+    
+    do {
+        menu = menuPrincipal();
 
-    int numero, menu=0;
-    char nome[100], plano[50];
-   
-  do {
-  	
-  	menu = menuPrincipal ();
-	
-	switch (menu) {
-	 case 0:
-	     printf("\n--- Voltar ---\n");
-               	int menu = menuPrincipal ();
-               	break; 
-    case 1: {
-    printf("\n--- Cadastro de Cliente ---\n");
+        switch(menu) {
+            case 0:
+                printf("\nSaindo...\n");
+                break;
 
-    printf("Número: ");
-    scanf("%d", &numero);
-    getchar();
+            case 1: {
+                printf("\n--- Cadastro de Cliente ---\n");
+                numero++;
+                printf("\nNúmero id - %d ", numero);
+                getchar();
+                
+                printf("Nome: ");
+                fgets(nome, sizeof(nome), stdin);
+                nome[strcspn(nome, "\n")] = '\0';
 
-    printf("Nome: ");
-    fgets(nome, sizeof(nome), stdin);
-    nome[strcspn(nome, "\n")] = '\0';
+                do {
+                    printf("Data de nascimento (dd mm aaaa): ");
+                    scanf("%d %d %d", &nascimento.dia, &nascimento.mes, &nascimento.ano);
+                    if (!dataValida(nascimento)) {
+                        printf("Data inválida! Tente novamente.\n");
+                    }
+                } while(!dataValida(nascimento));
 
-    char *categoria = Categoria();
+                char *categoria = Categoria();
+                Clientes *novo = criarCliente(numero, nome, categoria, nascimento);
+                clientesLista = inserirCliente(clientesLista, novo);
 
-    printf("Data de nascimento (dd mm aaaa): ");
-    scanf("%d %d %d", &nascimento.dia, &nascimento.mes, &nascimento.ano);
+                free(categoria);
+                printf("\nCliente cadastrado com sucesso!\n");
+                PausaBasica();
+                break;
+            }
 
-    Clientes *novo = criarCliente(numero, nome, categoria, nascimento);
-    clientesLista = inserirCliente(clientesLista, novo);
-  getchar ();
-    printf("\nCliente cadastrado com sucesso!\n");
-
-    free(categoria);
-    PausaBasica();
-    break;
-}
-
-    case 2:
-    	        system("cls");
+            case 2:
+                system("cls");
                 printf("\n--- Lista de Clientes ---\n");
                 listarClientes(clientesLista);
                 PausaBasica();
                 break;
-                
-                
-      case 3: {
+
+            case 3: {
+                int numeroRemover;
                 system("cls");
                 printf("=== REMOVER CLIENTE ===\n");
-                int numero;
                 printf("Digite o número do cliente a remover: ");
-                scanf("%d", &numero);
+                scanf("%d", &numeroRemover);
                 getchar();
-                clientesLista = removerCliente(clientesLista, numero);
-                 listarClientes(clientesLista);
+                clientesLista = removerCliente(clientesLista, numeroRemover);
+                listarClientes(clientesLista);
                 printf("\nCliente removido.\n");
-                
                 PausaBasica();
                 break;
             }
 
             case 4: {
+                int numeroTroca;
                 system("cls");
                 printf("=== TROCAR PLANO DE CLIENTE ===\n");
                 printf("Digite o número do cliente: ");
-                scanf("%d", &numero);
+                scanf("%d", &numeroTroca);
+                getchar();
                 char *novoPlano = Categoria();
-                clientesLista = trocarPlanoCliente(clientesLista, novoPlano, numero);
+                clientesLista = trocarPlanoCliente(clientesLista, novoPlano, numeroTroca);
                 listarClientes(clientesLista);
                 printf("\nPlano atualizado.\n");
+                free(novoPlano);
                 PausaBasica();
                 break;
             }
@@ -96,19 +100,65 @@ main () {
                 clientesLista = organizarClientesPorCategoria(clientesLista);
                 listarClientes(clientesLista);
                 printf("\nClientes reorganizados com sucesso!\n");
-                
-                pausarTela();
+                PausaBasica();
                 break;
+                
+                     case 6: {
+    system("cls");
+    printf("=== INSERIR CLIENTE POR CATEGORIA ===\n");
 
-               	
-              default:
+    
+    numero++;
+    printf("\nID : %d\n", numero);
+    getchar();
+
+    printf("Nome: ");
+    fgets(nome, sizeof(nome), stdin);
+    nome[strcspn(nome, "\n")] = '\0';
+
+    
+    do {
+        printf("Data de nascimento (dd mm aaaa): ");
+        scanf("%d %d %d",
+              &nascimento.dia, &nascimento.mes, &nascimento.ano);
+
+        if (!dataValida(nascimento)) {
+            printf("Data inválida! Tente novamente.\n");
+        }
+
+    } while (!dataValida(nascimento));
+
+    getchar();
+
+    
+    char *categoria = Categoria();
+
+    clientesLista = inserirPorCategoria(
+                        clientesLista,
+                        numero,
+                        nome,
+                        categoria,
+                        nascimento
+                    );
+
+    printf("\nCliente inserido diretamente na categoria!\n");
+    free(categoria);
+    PausaBasica();
+    break;
+}
+
+
+            default:
                 printf("\nOpção inválida!\n");
                 PausaBasica();
-	}
-  	
-     } while (menu!=0);
-	
+        }
+
+    } while(menu != 0);
+
+    return 0;
 }
+   
+
 
 int menuPrincipal () {
 	int opcao = 0;
@@ -120,8 +170,9 @@ int menuPrincipal () {
         printf("3. Remover cliente\n");
         printf("4. Trocar plano de cliente\n");
         printf("5. Organizar clientes por categoria\n");
-        printf("6. Separar clientes em três listas (Gold, Diamond, Simples)\n");
-        printf("7. Unir três listas novamente\n");
+        printf("6. Inserir cliente diretamente por categoria\n");
+        printf("7. Separar clientes em três listas (Gold, Diamond, Simples)\n");
+        printf("8. Unir três listas novamente\n");
         printf("0. Sair\n");
         printf("============================================\n");
         printf("Escolha uma opção: ");
@@ -136,7 +187,14 @@ void PausaBasica() {
 	system("cls");
 }
 
+void pausarTela() {
+    printf("\nPressione ENTER para continuar...");
+    getchar();
+}
+
+
 char* Categoria () {
+	
 	 char *categoria = (char*) malloc(20 * sizeof(char));
 	printf("\nEscolha a categoria:\n");
     printf("1. Simples\n");
@@ -166,4 +224,29 @@ char* Categoria () {
     
     }
 	return categoria;
+}
+
+// Função para verificar se o ano é bissexto
+
+int anoBissexto(int ano) {
+    return (ano % 4 == 0 && ano % 100 != 0) || (ano % 400 == 0);
+}
+
+int dataValida(DataDeNascimento nascimento) {
+    if (nascimento.ano < 1900 || nascimento.ano > 2100) return 0;
+    if (nascimento.mes < 1 || nascimento.mes > 12) return 0;
+
+    int diasNoMes;
+    switch (nascimento.mes) {
+        case 1: case 3: case 5: case 7: case 8: case 10: case 12:
+            diasNoMes = 31; break;
+        case 4: case 6: case 9: case 11:
+            diasNoMes = 30; break;
+        case 2:
+            diasNoMes = anoBissexto(nascimento.ano) ? 29 : 28; break;
+        default:
+            return 0;
+    }
+
+    return (nascimento.dia >= 1 && nascimento.dia <= diasNoMes);
 }
