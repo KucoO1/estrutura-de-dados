@@ -12,3 +12,6 @@ Clientes * removerCliente(Clientes * clientesLista, int numero);
 Clientes * trocarPlanoCliente(Clientes * clientesLista, char *plano,int numero);
 Clientes * organizarClientesPorCategoria(Clientes * clientesLista);
 void listarClientes(Clientes * clientesLista);
+Clientes *inserirPorCategoria(Clientes *clientesLista,int numero, char *nome, char *categoria, DataDeNascimento nascimento);
+//Clientes* unirTresListas(Clientes*golds,Clientes*diamonds,Clientes*simples);
+//Void tresListasClientes(Clientes**golds,Clientes**diamonds,Clientes**simples,Clientes * clientesLista);
