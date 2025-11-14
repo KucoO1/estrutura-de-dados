@@ -351,4 +351,4 @@ Clientes* unirTresListas(Clientes*golds,Clientes*diamonds,Clientes*simples){
 	 }
  	
  }
-*/
+*\
