@@ -3,8 +3,8 @@
 #include <string.h>
 #include <ctype.h> 
 #include "clientes.h"
-
-
+//Novas edits, na função de separar três listas
+//BY Mário
 
 struct Cliente{
 	int numero;
@@ -192,25 +192,27 @@ Clientes * criarListaSimple(){
     return NULL; // Inicializa lista vazia
 }
 
-void tresListasClientes(Clientes **golds, Clientes **diamonds, Clientes **simples, Clientes *clientesLista){
-    Clientes *prox = NULL; 
+void tresListasClientes(Clientes **golds, Clientes **diamonds, Clientes **simples, Clientes **clientesLista){
+    Clientes *prox = NULL;
+    Clientes *aux = *clientesLista;
 
-    if(clientesLista == NULL) return;
-     while(clientesLista != NULL){
-        prox = clientesLista->proximo; // guarda o próximo da lista original
-        clientesLista->proximo = NULL;    // limpa ponteiro antes de inserir
-        if(strcmp(clientesLista->categoria, "diamond") == 0){
-            *diamonds= inserirCliente(*diamonds, clientesLista);
+    if(aux == NULL) return;
+     while(aux != NULL){
+        prox = aux->proximo; // guarda o próximo da lista original
+        aux->proximo = NULL;    // limpa ponteiro antes de inserir
+        if(strcmp(aux->categoria, "diamond") == 0){
+            *diamonds= inserirCliente(*diamonds, aux);
     }
-        else if(strcmp(clientesLista->categoria, "gold") == 0){
-            *golds= inserirCliente(*golds, clientesLista);
+        else if(strcmp(aux->categoria, "gold") == 0){
+            *golds= inserirCliente(*golds, aux);
         	}
-        else if(strcmp(clientesLista->categoria, "simple") == 0){
-            *simples= inserirCliente(*simples, clientesLista);
+        else if(strcmp(aux->categoria, "simple") == 0){
+            *simples= inserirCliente(*simples, aux);
         		}
 
-        clientesLista= prox; // avança para o próximo da lista original
+        aux= prox; // avança para o próximo da lista original
     }
+    *clientesLista = NULL;
 }
 
 Clientes* unirTresListas(Clientes *golds, Clientes *diamonds, Clientes *simples){
@@ -250,7 +252,6 @@ Clientes* unirTresListas(Clientes *golds, Clientes *diamonds, Clientes *simples)
             }
         }
     }
-
     return novaLista; // Retorna lista unificada
 }
 
