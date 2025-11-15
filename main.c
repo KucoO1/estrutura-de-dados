@@ -4,7 +4,8 @@
 #include <locale.h>
 #include <string.h>
 #include "clientes.c"
-
+//Altrações no case 7 e 8, passagem por enderço da função principal, e zerando as listas secundárias
+//By me Mário sem Luigi
 int menuPrincipal ();
 int anoBissexto(int ano);
 int VerificarData(DataDeNascimento nascimento);
@@ -12,6 +13,10 @@ void PausaBasica();
 char* Categoria ();
 void pausarTela();
 void VerCategoria ();
+void PausaSemLimpar() {
+    printf("\nPressione Enter para continuar...");
+    getchar();
+}
 
 main () {
 	setlocale(LC_ALL, "Portuguese");
@@ -147,50 +152,50 @@ main () {
     PausaBasica();
     break;
                 
-                  case 7:
-                system("cls");
-                printf("=== Separar clientes em três listas (Gold, Diamond, Simples) ===\n");
-                fflush(stdin);
-                fflush(stdout);
-                tresListasClientes(&golds, &diamonds, &simples,clientesLista);
-                VerCategoria ();
-                scanf("%d", &VerListaCategoria);
-                switch (VerListaCategoria) {
+            case 7:
+    system("cls");
+    printf("=== Separar clientes em três listas (Gold, Diamond, Simples) ===\n");
+    golds = NULL;
+    diamonds = NULL;
+    simples = NULL;
+    tresListasClientes(&golds, &diamonds, &simples, &clientesLista);
 
-    case 1:
-        system("cls");
-        printf("\n--- Lista Gold ---\n");
-        listarClientes(golds);      
-        PausaBasica();
-        break;
+    VerCategoria();
+    scanf(" %d", &VerListaCategoria);
 
-    case 2:
-        system("cls");
-        printf("\n--- Lista Diamond ---\n");
-        listarClientes(diamonds);     
-        PausaBasica();
-        break;
+    switch (VerListaCategoria) {
+        case 1:
+            system("cls");
+            printf("\n--- Lista Gold ---\n");
+            listarClientes(golds);
+            PausaSemLimpar();
+            break;
 
-    case 3:
-        system("cls");
-        printf("\n--- Lista Simples ---\n");
-        listarClientes(simples);         
-        PausaBasica();
-        break;
+        case 2:
+            system("cls");
+            printf("\n--- Lista Diamond ---\n");
+            listarClientes(diamonds);
+            PausaSemLimpar();
+            break;
 
-    case 0:
-        printf("\nVoltando...\n");
-        break;
+        case 3:
+            system("cls");
+            printf("\n--- Lista Simples ---\n");
+            listarClientes(simples);
+            PausaSemLimpar();
+            break;
 
-    default:
-        printf("\nOpção inválida!\n");
-        break;
-}
-                printf("\nListas separadas com sucesso!\n");
-                
-                PausaBasica();
-                break;
-                
+        case 0:
+            printf("\nVoltando...\n");
+            break;
+
+        default:
+            printf("\nOpção inválida!\n");
+            break;
+    }
+    PausaBasica(); 
+    break;
+
                 
                   case 8:
                 system("cls");
@@ -198,7 +203,9 @@ main () {
                 clientesLista = unirTresListas(golds,diamonds,simples);
                 listarClientes(clientesLista);
                 printf("\nListas unidas com sucesso!\n");
-                
+                 golds = NULL;
+   				 diamonds = NULL;
+   				 simples = NULL;
                 PausaBasica();
                 break;
                 
@@ -311,5 +318,4 @@ printf("2. Lista Diamond\n");
 printf("3. Lista Simples\n");
 printf("0. Voltar\n");
 printf("Escolha: ");
-getchar();
 }
