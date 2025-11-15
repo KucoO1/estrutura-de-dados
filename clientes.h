@@ -2,7 +2,7 @@ typedef struct Cliente Clientes;
 
 typedef struct{
 	int dia, mes, ano;
-}DataDeNascimento;
+} DataDeNascimento;
 
 // Operações escolhidas pelo grupo
 Clientes * criarClientesLista();
@@ -18,3 +18,4 @@ Clientes * criarListaDiamond();
 Clientes * criarsListaGold();
 Clientes * criarListaSimples();
 void tresListasClientes(Clientes**golds,Clientes**diamonds,Clientes**simples,Clientes * clientesLista);
+int NumEncontrado(Clientes *clientesLista,int valor);
