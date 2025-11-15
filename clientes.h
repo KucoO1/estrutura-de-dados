@@ -1,4 +1,5 @@
 typedef struct Cliente Clientes;
+//Só lhe dei um update na função treslistas para tudo ser ponteiro de ponteiro
 
 typedef struct{
 	int dia, mes, ano;
@@ -17,5 +18,5 @@ Clientes* unirTresListas(Clientes*golds,Clientes*diamonds,Clientes*simples);
 Clientes * criarListaDiamond();
 Clientes * criarsListaGold();
 Clientes * criarListaSimples();
-void tresListasClientes(Clientes**golds,Clientes**diamonds,Clientes**simples,Clientes * clientesLista);
+void tresListasClientes(Clientes**golds,Clientes**diamonds,Clientes**simples,Clientes **clientesLista);
 int NumEncontrado(Clientes *clientesLista,int valor);
