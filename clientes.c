@@ -180,167 +180,171 @@ Clientes * removerCliente(Clientes * clientesLista, int numero){
 	free(aux);
 	return clientesLista;
 }
-//Daqui para baixo são as minhas funções
-//By: Mário:)
-/*
 
+//Novas atualizaçõees by Mário
 Clientes * criarListaDiamond(){
-	return NULL;
+    return NULL; // Inicializa lista vazia
 }
-Clientes * criarsListaGold(){
-	return NULL;
+Clientes * criarListaGold(){
+    return NULL; // Inicializa lista vazia
 }
-Clientes * criarListaSimples(){
-	return NULL;
+Clientes * criarListaSimple(){
+    return NULL; // Inicializa lista vazia
 }
-Void tresListasClientes(Clientes**golds,Clientes**diamonds,Clientes**simples,Clientes * clientesLista){
-    Clientes *aux = clientesLista;
-    Clientes *a=NULL;	
-    if(clientesLista == NULL) return NULL;
-	while(aux!=NULL){
-		
-		a=aux->proximo;
-		if(strcmp(aux->categoria, "diamond") == 0){
-			
-            aux->proximo=*diamonds;
-            *diamonds=aux;
-		}
-        else if(strcmp(aux->categoria, "gold") == 0){
-        	aux->proximo=*golds;
-            *golds=aux;
-		}                                     
-            
-        else if(strcmp(aux->categoria, "simples") == 0){
-        	aux->proximo=*simples;
-            *simples=aux;
-		}
-		aux=a;
-    
-	}
-	 }
 
-Clientes* unirTresListas(Clientes*golds,Clientes*diamonds,Clientes*simples){
-	Clientes *novaLista = NULL;
+void tresListasClientes(Clientes **golds, Clientes **diamonds, Clientes **simples, Clientes **clientesLista){
+    Clientes *prox = NULL;
+    Clientes *aux = *clientesLista;
+
+    if(aux == NULL) return;
+     while(aux != NULL){
+        prox = aux->proximo; // guarda o próximo da lista original
+        aux->proximo = NULL;    // limpa ponteiro antes de inserir
+        if(strcmp(aux->categoria, "diamond") == 0){
+            *diamonds= inserirCliente(*diamonds, aux);
+    }
+        else if(strcmp(aux->categoria, "gold") == 0){
+            *golds= inserirCliente(*golds, aux);
+        	}
+        else if(strcmp(aux->categoria, "simple") == 0){
+            *simples= inserirCliente(*simples, aux);
+        		}
+
+        aux= prox; // avança para o próximo da lista original
+    }
+    *clientesLista = NULL;
+}
+
+Clientes* unirTresListas(Clientes *golds, Clientes *diamonds, Clientes *simples){
+    Clientes *novaLista = NULL;
     Clientes *fim = NULL;
 
     if(diamonds) { 
-		novaLista = diamonds; 
-		fim = diamonds; 
-		while(fim->proximo != NULL) {
-			fim = fim->proximo;
-		} 
-	}
+        // Diamond será a cabeça inicial
+        novaLista = diamonds; 
+        fim = diamonds; 
+        while(fim->proximo != NULL) {
+            fim = fim->proximo; // Avança até ao último nó
+        } 
+    }
     if(golds) { 
-		if(novaLista==NULL){
-			novaLista = golds; 
-		} 
-			
-		else{
-			fim->proximo = golds; 
+        if(novaLista == NULL){
+            // Caso não haja diamond, gold será a cabeça
+            novaLista = golds; 
+            fim = golds; 
+        } else {
+            // Liga fim da lista diamond ao início da lista gold
+            fim->proximo = golds; 
             while(fim->proximo != NULL){
-               fim = fim->proximo; 
+                fim = fim->proximo; // Avança até ao último nó
             } 
-		}
-	}
-			
+        }
+    }
     if(simples){ 
-    
-		if(novaLista==NULL) 
-			novaLista = simples; 
-		else{ 
-			fim->proximo = simples; 
-			while(fim->proximo != NULL){
-			fim = fim->proximo;	
-			}
-	}
+        if(novaLista == NULL) {
+            // Caso não haja diamond nem gold, simples será a cabeça
+            novaLista = simples; 
+        } else { 
+            // Liga fim da lista atual ao início da lista simples
+            fim->proximo = simples; 
+            while(fim->proximo != NULL){
+                fim = fim->proximo; 
+            }
+        }
+    }
+    return novaLista; // Retorna lista unificada
+}
 
-    return novaLista;
-}
-}
- Clientes *inserirPorCategoria(Clientes *clientesLista,int numero, char *nome, char *categoria, DataDeNascimento nascimento){
- 	Clientes *novoCliente = (Clientes*)malloc(sizeof(Clientes));
- 	Clientes *aux= clientesLista,*a= clientesLista ;
+
+Clientes *inserirPorCategoria_atualizado(Clientes *clientesLista,int numero, char *nome, char *categoria, DataDeNascimento nascimento){
+	Clientes *novoCliente = (Clientes*)malloc(sizeof(Clientes));
+ 	Clientes *aux= clientesLista,*a= NULL ;
  	if(aux){ 
- 	if(novoCliente){
- 		novoCliente->numero = numero;
-        strcpy(novoCliente->nome, nome);
-        strcpy(novoCliente->categoria, categoria);
-        novoCliente->nascimento = nascimento;
-        novoCliente->proximo = NULL;
- 		if(strcmp(novoCliente->categoria, "diamond") == 0){
- 			while(aux!=NULL){
- 			if(aux->proximo){
- 				if(strcmp(aux->categoria, "diamond") == 0){
- 					if(strcmp(aux->proximo->categoria, "diamond")!=0){
- 						novoCliente->proximo= aux->proximo;
- 						aux->proximo=novoCliente;
- 						return clientesLista;
-			 }
-			 
-			}else{
-				novoCliente->proximo = aux;
+ 		if(novoCliente){
+ 			novoCliente->numero = numero;
+        	strcpy(novoCliente->nome, nome);
+        	strcpy(novoCliente->categoria, categoria);
+        	novoCliente->nascimento = nascimento;
+        	novoCliente->proximo = NULL;
+ 			if(strcmp(novoCliente->categoria, "diamond") == 0){
+ 			/*	while(aux!=NULL){
+ 					if(strcmp(aux->categoria, "diamond") == 0){
+ 						novoCliente->proximo=aux;
+ 						return novoCliente;
+ 					} else{
+ 						novoCliente->proximo=aux;
+ 						return novoCliente;}
+} */
+				novoCliente->proximo=aux;
 				return novoCliente;
 			}
-				
-			} else {
-				aux->proximo=novoCliente;
-				return clientesLista;
-		
-		 }
- 			aux=aux->proximo;
-		 } }
- 			if(strcmp(novoCliente->categoria, "gold") == 0){
- 			while(aux!=NULL){
- 			if(aux->proximo){
- 			if(strcmp(aux->categoria, "gold") == 0){
- 				if(strcmp(aux->proximo->categoria, "simples")==0){
- 					novoCliente->proximo= aux->proximo;
- 					aux->proximo=novoCliente;
- 				return clientesLista;
-				 }
-			 }
-			 else if(strcmp(aux->categoria, "diamond") == 0 && strcmp(aux->proximo->categoria, "simples") == 0){
- 				novoCliente->proximo= aux->proximo;
- 				aux->proximo=novoCliente;
- 				return clientesLista;
-			 } 
-			 else{
-			 	novoCliente->proximo = aux;
-				return novoCliente;
-			 }
-			 
-			} else {
-				if(strcmp(aux->categoria, "diamond") == 0 ||strcmp(aux->categoria, "gold") == 0){
-				
-					aux->proximo=novoCliente;
+			if(strcmp(novoCliente->categoria, "gold") == 0){
+				while(aux!=NULL){
+					a=aux;
+					aux=aux->proximo;
+					if (aux != NULL){
+					
+					if(strcmp(a->categoria, "gold") == 0){
+						novoCliente->proximo=a;
+						return novoCliente;
+					} else if(strcmp(a->categoria, "diamond") == 0){
+						if(strcmp(aux->categoria, "gold") == 0){
+						novoCliente->proximo=aux;
+						a->proximo=novoCliente;
+						return clientesLista;
+							}
+						if(strcmp(aux->categoria, "simple") == 0){
+							novoCliente->proximo=aux;
+							a->proximo=novoCliente;
+							return clientesLista;
+					}
+					} else if(strcmp(a->categoria, "simple") == 0){
+						novoCliente->proximo=a;
+						return novoCliente;
+					}
+				} else{
+					a->proximo=novoCliente;
 					return clientesLista;
 				}
-				else{
-					novoCliente->proximo = aux;
-					return novoCliente;	
+			}
+			}
+			if(strcmp(novoCliente->categoria, "simple") == 0){
+				while(aux != NULL){ 
+				
+				a=aux;
+				aux=aux->proximo;
+				if (aux != NULL){
+				if(strcmp(a->categoria, "simple") == 0){
+					novoCliente->proximo=a;
+					return novoCliente;
+				} else if(strcmp(a->categoria, "diamond") == 0){
+					if(strcmp(aux->categoria, "simple") == 0){
+						novoCliente->proximo=aux;
+						a->proximo=novoCliente;
+						return clientesLista;
+						}	
+					}
+					else if(strcmp(a->categoria, "gold") == 0){
+					if(strcmp(aux->categoria, "simple") == 0){
+						novoCliente->proximo=aux;
+						a->proximo=novoCliente;
+						return clientesLista;
+						}	
+					}
+				} else{
+					a->proximo=novoCliente;
+					return clientesLista;
 				}
 			}
-			aux=aux->proximo;
-		 }
- 		
-		 }
- 		if(strcmp(novoCliente->categoria, "simples") == 0){
- 			while(aux!=NULL){
- 			if(aux->proximo==NULL){
- 				novoCliente->proximo= aux->proximo;
- 				aux->proximo=novoCliente;
- 				return clienteLista;
-			 }
-			 aux=aux->proximo;
 			}
-				
-			}
-		 }
- 		
-		 }
-	 }else
-	 printf(" \nErro na alocação de memória do novo cliente!\n");
- 	}else{
+		}
+		else{
+			printf(" \nErro na alocação de memória do novo cliente!\n");
+	 		return NULL;
+		}
+	 		
+	}
+	else{
  		novoCliente->numero = numero;
         strcpy(novoCliente->nome, nome);
         strcpy(novoCliente->categoria, categoria);
@@ -350,5 +354,19 @@ Clientes* unirTresListas(Clientes*golds,Clientes*diamonds,Clientes*simples){
         return aux;
 	 }
  	
- }
-*\
+ }		
+ 
+ int NumEncontrado(Clientes *ClientesLista, int valor) {
+    Clientes *novo = ClientesLista;
+
+    while (novo) {
+        if (novo->numero == valor) {
+            return 1; // encontrado
+        }
+        novo = novo->proximo; // avança para o próximo nó
+    }
+
+    return 0; // não encontrado
+}
+
+
